@@ -1,0 +1,31 @@
+----------------------------------------tag----------------------------------------
+
+django.db.utils.InternalError:
+    (1366, "Incorrect string value: '\\xE5\\xB7\\xB2\\xE6\\xB7\\xBB...'
+    for column 'message' at row 1")
+原因：mysql编码问题，改为utf8编码
+解决：https://blog.csdn.net/qq_32144341/article/details/51318390
+    记得改完删除数据库重新建一个数据库
+    创库语句：
+        CREATE DATABASE IF NOT EXISTS db_name default character set utf8 COLLATE utf8_general_ci;
+
+----------------------------------------tag----------------------------------------
+
+'</i></span>%s<span class="input-group-btn"><button class="btn btn-default" type="button">%s</button></span></div></div>'
+% (input_html[0], _(u'Today'), input_html[1], _(u'Now')))
+IndexError: list index out of range
+
+笔记：django支持的三种时间Field(),
+    DateTimeField和DateField和TimeField
+    存储的内容分别对应着datetime(),date(),time()三个对象。
+        date “1000-01-01”到“9999-12-31” 3字节
+        time “-838:59:59”到“838:59:59” 3字节
+        datetime “1000-01-01 00:00:00” 到“9999-12-31 23:59:59” 8字节
+
+        date ：“yyyy-mm-dd”格式表示的日期值
+        time ：“hh:mm:ss”格式表示的时间值
+        datetime： “yyyy-mm-dd hh:mm:ss”格式
+
+解决：
+    1、换成DateField()
+    2、取消

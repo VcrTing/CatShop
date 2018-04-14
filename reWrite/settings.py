@@ -14,9 +14,11 @@ import os,sys
 from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# 配置项目功能路径
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR,'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR,'media'))
 sys.path.insert(0, os.path.join(BASE_DIR,'extract_apps'))
 
 
@@ -29,16 +31,17 @@ SECRET_KEY = 'kd))smvdrzh!8%1kp&o7pxc^%2s^zvfe_4e%$eh+dutk(vs!-t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# 配置语言首选项
 LANGUAGES = (
     ('en', _('English')),
     ('zh-hans', _('Chinese')),
 )
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
+# 配置app
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,8 +54,11 @@ INSTALLED_APPS = [
     'reversion',
     'web',
     'user',
+    'product',
+    'operation',
 ]
 
+# 配置下载中间件
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,6 +71,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'reWrite.urls'
 
+# 凭配置模板信息
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -86,7 +93,7 @@ WSGI_APPLICATION = 'reWrite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+# 连接mysql数据库，database名为rewrite,可以改databaseName
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -120,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
-
+# 配置中文
 LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
@@ -134,9 +141,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+# 静态文件储存地址
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
 ]
+
+# 媒体文件储存目录，被django调用
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

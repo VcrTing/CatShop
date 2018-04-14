@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from django.conf.urls import handler400,handler403,handler404,handler500
 import xadmin
 from xadmin.plugins import xversion
 xadmin.autodiscover()
@@ -25,4 +25,12 @@ urlpatterns = [
     path('admin/', xadmin.site.urls),
     path('',include('web.urls', namespace='WEB')),
     path('user/',include('user.urls', namespace='USER')),
+    path('operation/',include('operation.urls', namespace='OPERATION')),
+    path('product/',include('product.urls', namespace='PRODUCT')),
 ]
+
+# ERROR PAGE（错误界面）
+handler400 = 'web.views.error_400'
+handler403 = 'web.views.error_403'
+handler404 = 'web.views.error_404'
+handler500 = 'web.views.error_500'

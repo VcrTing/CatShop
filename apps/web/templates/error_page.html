@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ error_code }}</title>
+    <link rel="stylesheet" href="/static/bootstrap_3/css/bootstrap.css">
+</head>
+<body>
+    <style>
+            .row{
+                display: table-cell;
+                vertical-align: middle;
+            }
+            /* centered columns styles */
+            .row-centered {
+                text-align:center;
+            }
+            .col-centered {
+                display:inline-block;
+                float:none;
+                text-align:left;
+                margin-right:-4px;
+            }
+    </style>
+<div class="container">
+    <h1 class="col-xs-12 text-center">{{ error_code }}</h1>
+    <h1 class="page-header"></h1>
+    <div>
+        <a href="{% url 'WEB:to-index' %}" class="col-centered"><button class="btn btn-info">返回</button></a>
+    </div>
+</div>
+</body>
+</html>

@@ -24,23 +24,23 @@
 {% block top %}
 <nav class="top">
         <div class="top_middle">
-            <a href="{% url 'index' %}">
+            <a href="{% url 'WEB:to_index' %}">
             <span style="color:#C40000;margin:0px" class=" glyphicon glyphicon glyphicon-home redColor"></span>
             天猫首页
             </a>
             <span>喵，欢迎来天猫</span>
 
-            {% if user.is_authenticated %}
-                <a href="{% url 'login' %}">{{ request.user.username }}</a>
-                <a href="{% url 'users:logout' %}">退出</a>
+            {% if user_account.is_authenticated %}
+                <a href="{% url 'USER:to_center' %}">{{ request.user_account.nickname }}</a>
+                <a href="{% url 'USER:logout' %}">退出</a>
             {% else %}
-                <a href="{% url 'login' %}">请登录</a>
-                <a href="{% url 'register' %}">免费注册</a>
+                <a href="{% url 'USER:to_login' %}">请登录</a>
+                <a href="{% url 'USER:to_register' %}">免费注册</a>
             {% endif %}
 
         <span class="pull-right">
-            <a href="{% url 'operation:myOrder' %}">我的订单</a>
-            <a href="{% url 'operation:shoppingCat' %}">
+            <a href="{% url 'OPERATION:my_order' %}">我的订单</a>
+            <a href="{% url 'OPERATION:to_shopping_cat' %}">
             <span style="color:#C40000;margin:0px" class=" glyphicon glyphicon-shopping-cart redColor"></span>
             购物车<strong>{{ user_product_cat }}</strong>件</a>
         </span>
@@ -52,7 +52,7 @@
         <a href="index.html">
         <img id="logo" src="{% static 'img/site/logo.gif' %}" class="logo">
     </a>
-        <form class="searchForm" method="post" action="{% url 'product:queryResult' %}" autocomplete="off">
+        <form class="searchForm" method="post" action="{% url 'PRODUCT:query_result' %}" autocomplete="off">
         <div class="searchDiv">
             <input name="keyword" type="text" placeholder="时尚男鞋">
             <button  type="submit" class="searchButton">搜索</button>
@@ -60,7 +60,7 @@
                 {% for category in all_category %}
                 {% if forloop.counter <= 4 %}
                 <span>
-                <a href="{% url 'product:category' category.id %}">{{ category.name }}</a>
+                <a href="{% url 'PRODUCT:category' category.id %}">{{ category.name }}</a>
                 <span>|</span>
                 </span>
                 {% endif %}
@@ -92,7 +92,7 @@
         {% for category in all_category %}
             {% if forloop.counter <= 4 %}
                 <span>
-				<a href="{% url 'product:category' category.id %}">
+				<a href="{% url 'PRODUCT:category' category.id %}">
 					{{ category.name }}
 				</a></span>
             {% endif %}
@@ -106,7 +106,7 @@
     {% for category in all_category %}
         <div cid="{{ category.id }}" class="eachCategory">
 				<span class="glyphicon glyphicon-link"></span>
-				<a href="{% url 'product:category' category.id %}">
+				<a href="{% url 'PRODUCT:category' category.id %}">
 					{{ category.name }}
 				</a>
         </div>
@@ -183,8 +183,9 @@
                 {% for product in all_product %}
                     {% if product.category == category %}
                         <div class="productItem" >
-							<a href="{% url 'product:item' product.id %}"><img width="100px" data-url="{{ MEDIA_URL }}{{ product.get_title_image.image }}" src="{{ MEDIA_URL }}{{ product.get_title_image.image }}"></a>
-							<a class="productItemDescLink" href="{% url 'product:item' product.id %}">
+							<a href="{% url 'PRODUCT:item' product.id %}">
+                                <img width="100px" data-url="{{ MEDIA_URL }}{{ product.get_title_image.image }}" src="{{ MEDIA_URL }}{{ product.get_title_image.image }}"></a>
+							<a class="productItemDescLink" href="{% url 'PRODUCT:item' product.id %}">
 								<span class="productItemDesc">[热销]
 								{{ product.name|slice:"20" }}
 								</span>
@@ -218,7 +219,7 @@
                         </div>
 
                         <div class="login_acount_text">账户登录</div>
-                        <form class="loginForm"  method="post" action="{% url 'login' %}" autocomplete="off">
+                        <form class="loginForm"  method="post" action="{% url 'USER:login' %}" autocomplete="off">
                         <div class="loginInput " >
                             <span class="loginInputIcon ">
                                 <span class=" glyphicon glyphicon-user"></span>
@@ -234,8 +235,8 @@
                         </div>
                                     <span class="text-danger">不要输入真实的天猫账号密码</span><br><br>
                         <div>
-                            <a href="{% url 'forget_pwd' %}">忘记登录密码</a>
-                            <a href="{% url 'register' %}" class="pull-right">免费注册</a>
+                            <a href="{% url 'USER:to_forgot_pwd' %}">忘记登录密码</a>
+                            <a href="{% url 'USER:to_register' %}" class="pull-right">免费注册</a>
                         </div>
                         <div style="margin-top:20px">
                             <button class="btn btn-block redButton loginSubmitButton" type="submit">登录</button>
