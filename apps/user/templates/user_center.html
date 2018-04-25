@@ -1,14 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>VcrTing的个人中心</title>
-    <link rel="stylesheet" href="/static/bootstrap_3/css/bootstrap.css">
-</head>
-<body>
-<div class="container">
-    <h1>Here is VcrTing's Center Page</h1>
-    <a href="{% url 'WEB:to-index' %}">Go to Main Page</a>
+{% extends 'index.html' %}
+{% block title %}用户中心{% endblock %}
+{% load staticfiles %}
+
+{% block extra_js %}
+    <script>
+    var cartVaule={
+        cartNotSelected:"{% static 'img/site/cartNotSelected.png' %}",
+        cartSelected:"{% static 'img/site/cartSelected.png' %}",
+        settlement:"{% url 'OPERATION:buy' %}?",
+    }
+    </script>
+{% endblock %}
+{% block content %}
+    <script type="text/javascript" src="{% static 'js/forecart.js' %}"></script>
+    <script src="{% static 'js/jquery/3.3.1/jquery-3.3.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/fore/user_center.css' %}">
+{% if not request.session.user_message.user_id %}
+    <script type="text/javascript">
+        $(function () {
+            window.location.href = $('#index_url').val()
+        })
+    </script>
+{% endif %}
+    <input type="hidden" value="{% url 'WEB:to_index' %}" id="index_url"/>
+        <script type="text/javascript"><!-- 加载用户金额信息 -->
+            $(function(){
+                var url = $('#url').val()
+                var user_id = $('#user_id').val()
+                $.get(url,{'user_id':user_id},function (ret) {
+                    $('#sale_money').html(ret.use_money_count)
+                })
+            });
+        </script>
+<div class="homepageCategoryProducts">
+<div class="topItem"></div>
+    <div class="the_center">
+        <!-- left user div -->
+        <div class="lu">
+            头像：<img src="{{ MEDIA_URL }}{{ request.session.user_message.face }}" class="uimg" />
+            <div class="il"><br />
+                <label>Hi&nbsp;&nbsp;, &nbsp;&nbsp;&nbsp;{{ request.session.user_message.nickname }}</label><br /><br />
+                <label>欢迎来到猫の商城!</label><br /><br />
+                <button class="btn">会员精彩权益</button>
+            </div>
+        </div>
+        <!-- right form div -->
+        <div class="rf">
+            <div class="rm">
+                <input type="hidden" id="url" value="{% url 'USER:get_user_money' %}">
+                <form id="get_mny_form">
+                    <input type="hidden" id="user_id" name="user_id" value="{{ request.session.user_message.user_id }}">
+                </form>
+                <p>消费金额：<label id="sale_money">￥0000.00</label></p><br/><br/>
+                <button class="bb" style="width: 100px;height: 40px;">充值</button>
+                <button class="bb" style="width: 100px;height: 40px;">我的订单</button>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+{% endblock %}

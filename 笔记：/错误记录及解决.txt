@@ -7,7 +7,7 @@ django.db.utils.InternalError:
 解决：https://blog.csdn.net/qq_32144341/article/details/51318390
     记得改完删除数据库重新建一个数据库
     创库语句：
-        CREATE DATABASE IF NOT EXISTS db_name default character set utf8 COLLATE utf8_general_ci;
+        CREATE DATABASE IF NOT EXISTS catshop default character set utf8 COLLATE utf8_general_ci;
 
 ----------------------------------------tag----------------------------------------
 
@@ -17,6 +17,7 @@ IndexError: list index out of range
 
 笔记：django支持的三种时间Field(),
     DateTimeField和DateField和TimeField
+        对于auto_now和auto_now_add。两者默认值都为False。
     存储的内容分别对应着datetime(),date(),time()三个对象。
         date “1000-01-01”到“9999-12-31” 3字节
         time “-838:59:59”到“838:59:59” 3字节
@@ -29,3 +30,154 @@ IndexError: list index out of range
 解决：
     1、换成DateField()
     2、取消
+
+----------------------------------------tag----------------------------------------
+前台{{ MEDIA_URL }}无用
+    解决：
+        在context_processors中添加 'django.template.context_processors.media'
+        MEDIA_URL = ‘/media/’
+        MEDIA_ROOT = os.path.join(os.path.dirname(file),’media’)
+
+        from reWrite import settings
+        from django.contrib.staticfiles.urls import static
+        urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+----------------------------------------tag----------------------------------------
+错误：
+    opts = instance._meta AttributeError: 'QuerySet' object has no attribute '_meta'
+解决：
+    使用get()查询而不使用filter()查询
+
+----------------------------------------tag----------------------------------------
+错误：
+    o.__class__.__name__)
+    TypeError: Object of type 'ImageFieldFile' is not JSON serializable
+解决：更换session解析器
+    在settings.py里面添加：
+        SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+----------------------------------------tag----------------------------------------
+问题：
+    django事物回滚机制
+解决：
+
+----------------------------------------tag----------------------------------------
+问题：django-2.0.4
+    django.urls.exceptions.NoReverseMatch: Reverse for 'category' with arguments '(1,)'
+    not found. 1 pattern(s) tried: ['product\\/category$']
+
+解决：
+    { url }里面有参数传到后台，而后台没有对应的url去接收，
+    例子：
+        接收url
+        path('category/<int:category_id>', CategoryView.as_view(), name='category'),
+
+----------------------------------------tag----------------------------------------
+错误：
+    post = self.changed_data['post']
+    TypeError: list indices must be integers or slices, not str
+
+----------------------------------------tag----------------------------------------
+错误：
+    Forbidden (CSRF token missing or incorrect.): /user/center
+    [20/Apr/2018 08:39:21] "POST /user/center HTTP/1.1" 403 2508
+
+解决：
+    aaa
+
+----------------------------------------tag----------------------------------------
+错误：
+    使用jsonResponse时，传入Model对象，即jsonResponse(apps.user.models.UserM)，报错：
+    TypeError: Object of type 'UserM' is not JSON serializable
+解决：
+    from django.forms.models import model_to_dict(apps.user.models.UserM)
+
+----------------------------------------tag----------------------------------------
+django2.0使用redis错误：
+    Could not find backend 'redis_cache.RedisCache': No module named 'redis_cache'
+解决方案：
+    未解决，因为django-redis不支持django2.0版本，所以暂时无法使用django-redis
+    最后使用的是redis_py来处理
+
+----------------------------------------tag----------------------------------------
+django2.0模型层无法存入redis_py.append()，错误：
+    value = unicode(value)
+    TypeError: __str__ returned non-string (type int)
+解决：
+    使用from django.forms.models import model_to_dict
+    model_to_dict(model)后就可以存到redis数据库中了
+
+----------------------------------------tag----------------------------------------
+使用redis_py取数据时报的错误：
+    a bytes-like object is required, not 'str'
+解决方法：
+    使用bytes.decode()方法将取出的bytes转为str类型，再执行split()方法
+
+----------------------------------------tag----------------------------------------
+错误：
+    from apps.user.models import UserAccount
+    ImportError: cannot import name 'UserAccount'
+解决：
+    模型层与模型层之间不能相互引用，否则报错
+
+----------------------------------------tag----------------------------------------
+错误：
+    user_money.use_money_count += product.promote_price
+    TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'float'
+解决：
+    from decimal import Decimal
+    decimal.Decimal + Decimal(float)
+
+----------------------------------------tag----------------------------------------
+django部署报错:
+    /home/vcrting/anaconda3/envs/webs/compiler_compat/ld: error: lto-wrapper failed
+    collect2: error: ld returned 1 exit status
+解决:降低gcc版本为4.7
+    https://blog.csdn.net/jacke121/article/details/54565281
+    具体步骤：https://blog.csdn.net/ppp036/article/details/51126468
+
+----------------------------------------tag----------------------------------------
+nginx之报错：
+    uwsgi: error while loading shared libraries: libpcre.so.1: cannot open shared object file: No such file or directory
+解决：
+    最后没解决这个错误，改为使用apache2部署项目
+----------------------------------------tag----------------------------------------
+apache2错误：
+    apache2.service is not active, cannot reload.
+解决：
+    nginx占用的80端口
+
+----------------------------------------tag----------------------------------------
+启动apache2报错：
+    /etc/init.d/apache2 start
+    [....] Starting apache2 (via systemctl): apache2.serviceJob for
+        apache2.service failed because the control process exited with error code.
+        See "systemctl status apache2.service" and "journalctl -xe" for details.
+    failed!
+解决：
+    配置文件写错了！
+
+----------------------------------------tag----------------------------------------
+python3 manage.py collectstatic报错：
+    raise ImproperlyConfigured("You're using the staticfiles app "
+    django.core.exceptions.ImproperlyConfigured:
+        You're using the staticfiles app without having set the STATIC_ROOT
+        setting to a filesystem path.
+解决：
+    很简单的错误，没有static_root文件夹
+
+----------------------------------------tag----------------------------------------
+ubuntu安装libapache2-mod-wsgi-py3报错:
+    dpkg: 处理软件包 libapache2-mod-wsgi-py3 (--configure)时出错：
+    子进程 已安装 post-installation 脚本 返回错误状态 1
+    在处理时有错误发生：
+解决：
+    https://www.cnblogs.com/bk770466199/p/6430467.html
+
+----------------------------------------tag----------------------------------------
+apache2 reload错误：
+    Job for apache2.service failed because the control process exited
+        with error code. See "systemctl status apache2.service"
+        and "journalctl -xe" for details.
+解决：
+    aaa

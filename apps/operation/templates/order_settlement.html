@@ -1,10 +1,10 @@
 {% extends 'index.html' %}
-{% block title %}结算页面by维民{% endblock %}
+{% block title %}结算页面{% endblock %}
 {% load static %}
 
 {% block content %}
 <div class="buyPageDiv">
-  <form  method="post" action="{% url 'operation:buy' %}" autocomplete="off" class="buyForm">
+  <form  method="post" action="{% url 'OPERATION:buy' %}" autocomplete="off" class="buyForm">
 
 	<div class="buyFlow">
 		<img class="pull-left" src="{% static 'img/site/simpleLogo.png' %}">
@@ -17,11 +17,11 @@
 			<table class="addressTable">
 				<tr>
 					<td class="firstColumn">详细地址<span class="redStar">*</span></td>
-					<td><textarea name="address" placeholder="建议您如实填写详细收货地址，例如接到名称，门牌好吗，楼层和房间号等信息"></textarea></td>
+					<td><textarea name="address" placeholder="建议您如实填写详细收货地址，例如接到名称，门牌号码，楼层和房间号等信息"></textarea></td>
 				</tr>
 				<tr>
 					<td>邮政编码</td>
-					<td><input  name="post" placeholder="如果您不清楚邮递区号，请填写000000" type="text"></td>
+					<td><input  name="post" placeholder="默认000000" type="text"></td>
 				</tr>
 				<tr>
 					<td>收货人姓名<span class="redStar">*</span></td>
@@ -62,6 +62,7 @@
 			</thead>
 			<tbody class="productListTableTbody">
             {% for order_item in all_order_item %}
+                <input type="hidden" name="oiid" value="{{ order_item.id }}">
                 <tr class="orderItemTR">
 						<td class="orderItemFirstTD"><img class="orderItemImg" src="{{ MEDIA_URL }}{{ order_item.product.get_title_image.image }}"></td>
 						<td class="orderItemProductInfo">
@@ -76,14 +77,17 @@
 						</td>
 						<td>
 
-						<span class="orderItemProductPrice">{{ order_item.product.promoteprice }}</span>
+						<span class="orderItemProductPrice">{{ order_item.product.promote_price }}</span>
 						</td>
 						<td>
 						<span class="orderItemProductNumber">{{ order_item.number }}</span>
+                        <input type="hidden" name="number" value="{{ order_item.number }}">
 						</td>
 						<td><span class="orderItemUnitSum">
-						￥{% widthratio order_item.product.promoteprice 1 order_item.number %}
+						￥{% widthratio order_item.product.promote_price 1 order_item.number %}
 						</span></td>
+
+                <input type="hidden" name="product_id" value="{{ order_item.product.id }}">
             {% endfor %}
 						<td rowspan="5"  class="orderItemLastTD">
 						<label class="orderItemDeliveryLabel">
@@ -109,7 +113,7 @@
 					<img class="leaveMessageImg" src="{% static 'img/site/leaveMessage.png' %}">
 				</span>
 				<span class="leaveMessageTextareaSpan">
-					<textarea name="userMessage" class="leaveMessageTextarea"></textarea>
+					<textarea name="user_msg" class="leaveMessageTextarea" value="默认无备注。"></textarea>
 					<div>
 						<span>还可以输入200个字符</span>
 					</div>
@@ -118,9 +122,7 @@
 
 			<span class="pull-right">店铺合计(含运费): ￥{{ all_unit }}</span>
 		</div>
-
 	</div>
-
 	<div class="orderItemTotalSumDiv">
 		<div class="pull-right">
 			<span>实付款：</span>

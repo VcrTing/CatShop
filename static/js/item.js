@@ -1,5 +1,5 @@
 /**
- * Created by 24102 on 2017/5/19.
+ * Created by 24102 on 2018/4/19.
  */
 $(function () {
 	//显示缩略图
@@ -71,7 +71,7 @@ $(function () {
                 function(){
                     if (MyViewVar.is_login) {
                         var num = $(".productNumberSetting").val();
-                        location.href = $(".buyLink").attr("href") + "&num=" + num;
+                        location.href = $(".buyLink").attr("href")+'&num='+num;
                     } else {
                         $("#loginModal").modal('show');
                     }
@@ -82,38 +82,4 @@ $(function () {
 
     //加入购物车按钮监听
     $(".addCartButton").removeAttr("disabled");
-    $(".addCartLink").click(function(){
-        var page = MyViewVar.foreBoughtPage;
-        $.get(
-                page,
-                function(){
-                    if(MyViewVar.is_login){
-                        var pid = MyViewVar.pid;
-                        var num= $(".productNumberSetting").val();
-                        var addCartpage = MyViewVar.foreAddCartPage;
-                        $.get(
-                                addCartpage,
-                                {"pid":pid,"num":num},
-                                function(ret){
-                                    if("success"==ret){
-                                        $(".addCartButton").html("已加入购物车");
-                                        $(".addCartButton").attr("disabled","disabled");
-                                        $(".addCartButton").css("background-color","lightgray")
-                                        $(".addCartButton").css("border-color","lightgray")
-                                        $(".addCartButton").css("color","black")
-
-                                    }
-                                    else{
-
-                                    }
-                                }
-                        );
-                    }
-                    else{
-                        $("#loginModal").modal('show');
-                    }
-                }
-        );
-        return false;
-    });
 });

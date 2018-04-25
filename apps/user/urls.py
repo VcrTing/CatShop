@@ -1,13 +1,23 @@
-from django.urls import path
-from user.views import *
+from django.urls import path,re_path
+from .views import *
 
 app_name = 'user'
 urlpatterns = [
-    path('login', login, name='login'),
-    path('loginout', logout, name='logout'),
-    path('register', register, name='register'),
-    path('center', to_center, name='to_center'),
-    path('to_login', to_login, name='to_login'),
-    path('fpwd', to_forgot_pwd, name='to_forgot_pwd'),
-    path('to_register', to_register, name='to_register'),
+    # 注册
+    path('register', RegisterView.as_view(), name='register'),
+
+    # 登录
+    path('login', LoginView.as_view(), name='login'),
+
+    # 退出登录
+    path('logout', LogoutView.as_view(), name='logout'),
+
+    # 用户中心
+    path('center', CenterView.as_view(), name='center'),
+
+    # 忘记密码
+    path('new_pwd', ForgetPwdView.as_view() , name='forgot_pwd'),
+
+    # 获取资金
+    path('get_mny', MoneyView.as_view(),name='get_user_money'),
 ]

@@ -1,0 +1,54 @@
+1、采集模块信息：pip freeze > package.txt
+
+2、改动settings.py
+    DEBUG=False
+    ALLOWED_HOSTS = ['*']
+
+3、项目下建wsgi.ini文件，写好配置项
+    WSGI像是一种协议，遵循了这个协议
+
+4、配置uwsgi
+    http=127.0.0.1:8000端口被占用，查看配置文件
+    socket=127.0.0.1:8000这个是结合nginx的配置，而不是http
+
+5、使用nginx,使用nginx的作用,1、负载均衡（多台服务器轮流处理请求）2、反射代理（隐藏真实服务器）
+
+    实现架构：客户端请求nginx，再由nginx请求uwsgi，运行django框架下的python代码
+
+    测试nginx:进入默认安装文件夹cd /usr/local/nginx或者/etc/nginx
+    查看版本：sudo sbin/nginx -v
+    启动：sudo sbin/nginx
+    停止：sudo sbin/nginx -s stop
+    重启：sudo sbin/nginx -s reload
+    通过浏览器查看nginx运行效果:localhost
+    指向uwsgi项目：编辑/etc/nginx/sites-enabled/default文件
+
+    uwsgi中
+    socket=127.0.0.1:8000 # 这里面去运行django的代码
+
+    nginx中
+    http{
+        server{
+            listen 80 #监听80,只要是80端口，nginx被执行
+
+            location / { # /匹配任何地址
+                uwsgi_pass 127.0.0.1:8000 # 转入uwsgi里面的socket=127.0.0.1：8000
+                                          # 比如：127.0.0.1:80/index，转入uwsgi，然后拿index去匹配django的url
+            }
+            location /static { # 请求根目录下的静态文件
+                alias
+            }
+        }
+    }
+6、启动uwsgi与nginx
+
+安装好git
+git教程：
+    url = https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/
+
+    git配置好帐号与密码，配置好SSH key到github
+上传到github:
+    pycharm中，先在setting设置里面找到版本控制，连接github,
+    点击VCS,选import into version control，
+    打开github，按照提示提交项目
+更新项目到github:

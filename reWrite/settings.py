@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.join(BASE_DIR,'extract_apps'))
 SECRET_KEY = 'kd))smvdrzh!8%1kp&o7pxc^%2s^zvfe_4e%$eh+dutk(vs!-t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # 配置语言首选项
 LANGUAGES = (
@@ -38,7 +38,6 @@ LANGUAGES = (
 )
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 # 配置app
@@ -49,14 +48,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'captcha',
     'xadmin',
     'crispy_forms',
     'reversion',
-    'web',
-    'user',
-    'product',
-    'operation',
+
+    'apps.web',
+    'apps.user',
+    'apps.product',
+    'apps.operation',
 ]
+SITE_ID = 1
 
 # 配置下载中间件
 MIDDLEWARE = [
@@ -83,6 +87,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+
             ],
         },
     },
@@ -97,13 +103,28 @@ WSGI_APPLICATION = 'reWrite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rewrite',
+        'NAME': 'catshop',
         'HOST':'localhost',
         'PORT':3306,
         'USER':'root',
         'PASSWORD':'ZT123zlt',
     }
 }
+
+# 连接缓存数据库
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'OPTIONS': { # optional
+            'DB': 1,
+            #'PASSWORD': 'yadayada',
+        },
+    }
+}
+
+# redis数据过期时间
+NEVER_REDIS_TIMEOUT = 60*60
 
 
 # Password validation
@@ -138,6 +159,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# 更换session解析
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -145,9 +168,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR,'static').replace('\\','/'),
+    os.path.join(BASE_DIR,'media','produceImage').replace('\\','/'),
+    os.path.join(BASE_DIR,'media','web_site').replace('\\','/'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # 媒体文件储存目录，被django调用
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#MEDIA_URL = MEDIA_ROOT+'/'
+
+# django-simple-captcha
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+#AUTH_USER_MODEL = 'user.UserAccount'
+
+# django全局前台用户登录地址
+# LOGIN_URL = 'USER/login'

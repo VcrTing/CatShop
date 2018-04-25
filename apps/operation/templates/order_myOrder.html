@@ -1,82 +1,85 @@
 {% extends 'index.html' %}
 {% load staticfiles %}
 {% block title %}
-我的订单by维民
+我的订单
 {% endblock %}
 
 {% block content %}
 <section class="body">
-<script>
-var deleteOrder = false;
-var deleteOrderid = 0;
+    <script href="{% static 'js/jquery/3.3.1/jquery-3.3.1.min.js' %}"></script>
+    <script>
+        $(function () {
+            var deleteOrder = false;
+            var deleteOrderid = 0;
 
-$(function(){
-	$("a[orderStatus]").click(function(){
-		var orderStatus = $(this).attr("orderStatus");
-		if('all'==orderStatus){
-			$("table[orderStatus]").show();
-		}
-		else{
-			$("table[orderStatus]").hide();
-			$("table[orderStatus="+orderStatus+"]").show();
-		}
+            $(function(){
 
-		$("div.orderType div").removeClass("selectedOrderType");
-		$(this).parent("div").addClass("selectedOrderType");
-	});
+                $("a[orderStatus]").click(function(){
+                    var orderStatus = $(this).attr("orderStatus");
+                    if('all'==orderStatus){
+                        $("table[orderStatus]").show();
+                    }
+                    else{
+                        $("table[orderStatus]").hide();
+                        $("table[orderStatus="+orderStatus+"]").show();
+                    }
 
-	$("a.deleteOrderLink").click(function(){
-		deleteOrderid = $(this).attr("oid");
-		deleteOrder = false;
-		$("#deleteConfirmModal").modal("hide");
-	});
+                    $("div.orderType div").removeClass("selectedOrderType");
+                    $(this).parent("div").addClass("selectedOrderType");
+                });
 
-	$("button.deleteConfirmButton").click(function(){
-		deleteOrder = true;
-		$("#deleteConfirmModal").modal('hide');
-	});
+                $("a.deleteOrderLink").click(function(){
+                    deleteOrderid = $(this).attr("oid");
+                    deleteOrder = false;
+                    $("#deleteConfirmModal").modal("hide");
+                });
 
-	$('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
-		if(deleteOrder){
-			var page="foredeleteOrder";
-			if(false)$.post(
-				    page,
-				    {"oid":deleteOrderid},
-				    function(result){
-						if("success"==result){
-							$("table.orderListItemTable[oid="+deleteOrderid+"]").hide();
-						}
-						else{
-							location.href="login.jsp";
-						}
-				    }
-				);
+                $("button.deleteConfirmButton").click(function(){
+                    deleteOrder = true;
+                    $("#deleteConfirmModal").modal('hide');
+                });
 
-		}
-	})
+                $('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
+                    if(deleteOrder){
+                        var page="foredeleteOrder";
+                        /*if(false)$.post(
+                                page,
+                                {"oid":deleteOrderid},
+                                function(result){
+                                    if("success"==result){
+                                        $("table.orderListItemTable[oid="+deleteOrderid+"]").hide();
+                                    }
+                                    else{
+                                        location.href="login.jsp";
+                                    }
+                                }
+                            );*/
+                    }
+                })
+                $(".ask2delivery").click(function(){
+                    var link = $(this).attr("link");
+                    $(this).hide();
+                    page = $('#now_url').val();
+                    $.ajax({
+                           url: page,
+                           success: function(result){
+                               alert("卖家已秒发，刷新当前页面，即可进行确认收货")
+                           }
+                        });
 
-	$(".ask2delivery").click(function(){
-		var link = $(this).attr("link");
-		$(this).hide();
-		page = {% url 'operation:myOrder' %};
-		$.ajax({
-			   url: page,
-			   success: function(result){
-				alert("卖家已秒发，刷新当前页面，即可进行确认收货")
-			   }
-			});
+                });
+            });
 
-	});
-});
-
-</script>
+        })
+    </script>
+    <input type="hidden" id="now_url" value="{% url 'OPERATION:user_order' %}">
 <div class="boughtDiv">
 	<div class="orderType">
-		<div class="selectedOrderType"><a orderStatus="all" href="#nowhere">所有订单</a></div>
-		<div><a  orderStatus="waitPay" href="#nowhere">待付款</a></div>
-		<div><a  orderStatus="waitDelivery" href="#nowhere">待发货</a></div>
-		<div><a  orderStatus="waitConfirm" href="#nowhere">待收货</a></div>
-		<div><a  orderStatus="waitReview" href="#nowhere" class="noRightborder">待评价</a></div>
+		<div class="selectedOrderType"><a orderStatus="all" href="#">所有订单</a></div>
+		<div><a  orderStatus="waitPay" href="#">待付款</a></div>
+		<div><a  orderStatus="waitDelivery" href="#">待发货</a></div>
+		<div><a  orderStatus="waitConfirm" href="#">待收货</a></div>
+		<div><a  orderStatus="waitReview" href="#" class="noRightborder">待评价</a></div>
 		<div class="orderTypeLastOne"><a class="noRightborder"> </a></div>
 	</div>
 	<div style="clear:both"></div>
@@ -92,24 +95,23 @@ $(function(){
 		</table>
 
 	</div>
-
 	<div class="orderListItem">
         {% for order in orders %}
             <table class="orderListItemTable" orderStatus="waitReview" oid="{{ order.id }}">
 				<tr class="orderListItemFirstTR">
 					<td colspan="2">
-					<b>{{ order.createDate }}</b>
-					<span>订单号: {{ order.orderCode }}
+					<b>{{ order.create_time }}</b>
+					<span>订单号: {{ order.order_code }}
 					</span>
 					</td>
 					<td  colspan="2"><img width="13px" src="{% static 'img/site/orderItemTmall.png' %}">天猫商场</td>
 					<td colspan="1">
-						<a class="wangwanglink" href="#nowhere">
+						<a class="wangwanglink" href="#">
 							<div class="orderItemWangWangGif"></div>
 						</a>
 					</td>
 					<td class="orderItemDeleteTD">
-						<a class="deleteOrderLink" oid="{{ order.id }}" href="#nowhere">
+						<a class="deleteOrderLink" oid="{{ order.id }}" href="#">
 							<span  class="orderListItemDelete glyphicon glyphicon-trash"></span>
 						</a>
 
@@ -117,11 +119,15 @@ $(function(){
 				</tr>
                 {% for order_item in order.get_order_item %}
                     <tr class="orderItemProductInfoPartTR" >
-						<td class="orderItemProductInfoPartTD"><img width="80" height="80" src="{{ MEDIA_URL }}{{ order_item.product.get_title_image.image }}"></td>
+						<td class="orderItemProductInfoPartTD">
+                            <img width="80" height="80" src="{{ MEDIA_URL }}{{ order_item.product.get_title_image.image }}">
+                            <br/>
+                            <font size="1" color="gray">收货地址：{{ order.address }}</font>
+                        </td>
 						<td class="orderItemProductInfoPartTD">
 							<div class="orderListItemProductLinkOutDiv">
-								<a href="{% url 'product:item' order_item.product.id %}">{{ order_item.product.name }}</a>
-								<div class="orderListItemProductLinkInnerDiv">
+								<a href="{% url 'PRODUCT:item' order_item.product.id %}">{{ order_item.product.name }}</a>
+                                <div class="orderListItemProductLinkInnerDiv">
 											<img src="{% static 'img/site/creditcard.png' %}" title="支持信用卡支付">
 											<img src="{% static 'img/site/7day.png' %}" title="消费者保障服务,承诺7天退货">
 											<img src="{% static 'img/site/promise.png' %}" title="消费者保障服务,承诺如实描述">
@@ -129,52 +135,76 @@ $(function(){
 							</div>
 						</td>
 						<td  class="orderItemProductInfoPartTD" width="100px">
-
-							<div class="orderListItemProductOriginalPrice">￥{{ order_item.product.orignalPrice }}</div>
-							<div class="orderListItemProductPrice">￥{{ order_item.product.promoteprice }}</div>
+							<div class="orderListItemProductOriginalPrice">￥{{ order_item.product.orignal_price }}</div>
+							<br/><div class="orderListItemProductPrice">￥{{ order_item.product.promote_price }}</div>
 
 						</td>
 
                         <td valign="top" rowspan="1" class="orderListItemNumberTD orderItemOrderInfoPartTD" width="100px">
-                            <span class="orderListItemNumber">{{ order_item.number }}</span>
+                            <span class="orderListItemNumber"><br/><br/>{{ order_item.number }}</span>
                         </td>
                         <td valign="top" rowspan="1" width="120px" class="orderListItemProductRealPriceTD orderItemOrderInfoPartTD">
-                            <div class="orderListItemProductRealPrice">￥{% widthratio order_item.number 1 order_item.product.promoteprice %}</div>
-                            <div class="orderListItemPriceWithTransport">(含运费：￥0.00)</div>
+                            <br/><div class="orderListItemProductRealPrice">￥{% widthratio order_item.number 1 order_item.product.promote_price %}</div>
+                            <br/><div class="orderListItemPriceWithTransport">(含运费：￥0.00)</div>
                         </td>
-                        {% ifequal order_item.status "waitReview" %}
-                            <td valign="middle" rowspan="1" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
-                                <a href="{% url 'operation:review' %}?oid={{ order_item.id }}">
-                                    <button  class="orderListItemReview">评价</button>
-                                </a>
-                            </td>
-                        {% endifequal %}
+                            <form id="form_gp" method="post" action="{% url 'OPERATION:settlement' %}" >
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ order_item.id }}" name="oid" id="oid">
+                                <input type="hidden" value="{{ request.session.user_message.user_id }}" name="user_id" id="user_id">
+                            </form>
                 {% endfor %}
-                            {% ifequal order.status "waitPay" %}
-                                <td valign="middle" rowspan="{{ order.get_order_count }}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
-                                <a href="{% url 'operation:settlement' %}?oid={{ order.id }}">
-                                    <button  class="orderListItemConfirm">付款</button>
-                                </a>
-                                </td>
-                            {% endifequal %}
-                            {% ifequal order.status "waitDelivery" %}
-                                <td valign="middle" rowspan="{{ order.get_order_count }}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
-                                <span>待发货</span>
-                                <button class="btn btn-info btn-sm ask2delivery" link="admin_order_delivery?id=964">催卖家发货</button>
-                                </td>
-                            {% endifequal %}
-                            {% ifequal order.status "waitConfirm" %}
-                                <td valign="middle" rowspan="{{ order.get_order_count }}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
-                                <a href="{% url 'operation:confirmPay' %}?oid={{ order.id }}">
-                                    <button  class="orderListItemConfirm">确认收货</button>
-                                </a>
-                                </td>
-                            {% endifequal %}
+
+
+                            <form id="form_gg" method="post" action="{% url 'OPERATION:get_goods' %}" >
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ order_item.order_code }}" name="order_code" id="order_code">
+                            </form>
+                            <form id="form_gg_over" method="post" action="{% url 'OPERATION:got_goods' %}" >
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ order_item.order_code }}" name="order_code" id="order_code">
+                            </form>
+                        <input type="hidden" id="status" value="{{ order.status }}"/>
+                        <input type="hidden" id="oid" value=""/>
+                        <td valign="middle" rowspan="{{ order.get_order_count }}" class="orderListItemButtonTD orderItemOrderInfoPartTD" width="100px">
+
+                            <script>
+                                cg_btn = function(){
+                                    var status = $('#status').val();
+                                    alert(status)
+                                    if (status == 'waitPay'){
+                                       $('#ope_btn').html('付款');
+                                    }
+                                    else if(status == 'waitDelivery'){
+                                       $('#ope_btn').html('查看物流')
+                                    }
+                                    else if(status == 'waitConfirm'){
+                                       $('#ope_btn').html('确认收货')
+                                    }
+                                    else if(status == 'finish'){
+                                       $('#ope_btn').html('去评价')
+                                    }
+                                }
+                                window.onload = function(){
+                                    cg_btn();
+                                }
+                                go_btn = function (oid) {
+                                    /*var gg_url = $('#form_gg').attr('href')
+                                    var order_code = $('#order_code').val()
+                                    var user_id = $('#user_id').val()
+                                    var order_item_id = oid
+                                    alert(oid)
+                                    $.get(gg_url,{'order_code':order_code},function () {
+                                        cg_btn();
+                                    })*/
+                                    $('#form_gp').submit();
+                                }
+                            </script>
+                            <button  class="orderListItemConfirm" id="ope_btn" onclick="go_btn();">付款</button>
+                        </td>
 					</tr>
 			</table>
         {% endfor %}
 	</div>
-
 </div>
 </section>
 {% endblock %}

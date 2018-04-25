@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-{% block title %}登陆页面by维民{% endblock %}
+{% block title %}登陆页面{% endblock %}
 
 {% load staticfiles %}
 
@@ -17,10 +17,9 @@
 		<div class="simpleLogo">
 			<img src="{% static 'img/site/simpleLogo.png' %}">
 		</div>
+        <img id="loginBackgroundImg" class="loginBackgroundImg" src="{% static 'img/site/loginBackground.png' %}">
 
-		<img id="loginBackgroundImg" class="loginBackgroundImg" src="{% static 'img/site/loginBackground.png' %}">
-
-		<form class="loginForm"  method="post" action="{% url 'login' %}" autocomplete="off">
+		<form class="loginForm"  method="post" action="{% url 'USER:login' %}" autocomplete="off">
 			<div id="loginSmallDiv" class="loginSmallDiv">
 				<div class="loginErrorMessageDiv">
 					<div class="alert alert-danger" >
@@ -46,15 +45,22 @@
 					</span>
 					<input id="password" name="password" type="password" placeholder="密码" type="text">
 				</div>
-    			<span class="text-danger">不要输入真实的天猫账号密码</span><br><br>
+    			<span class="text-danger">
+                    {% if error %}
+		                {{ error }}
+                        {% else %}
+                        不要输入真实的天猫账号密码
+                    {% endif %}
+                </span><br><br>
 				<div>
-					<a class="notImplementLink" href="{% url 'forget_pwd' %}">忘记登录密码</a>
-					<a class="pull-right" href="{% url 'USER:to-register' %}">免费注册</a>
+					<a class="notImplementLink" href="{% url 'USER:forgot_pwd' %}">忘记登录密码</a>
+					<a class="pull-right" href="{% url 'USER:register' %}">免费注册</a>
 				</div>
 				<div style="margin-top:20px">
 					<button class="btn btn-block redButton" type="submit">登录</button>
 				</div>
 			</div>
+            <input type="hidden" name="next" value="{{ next|escape }}" />
             {% csrf_token %}
 		</form>
 	</div>

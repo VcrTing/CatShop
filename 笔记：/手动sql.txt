@@ -1,0 +1,13 @@
+删数据库：
+
+drop database catshop;
+
+创数据库：
+
+CREATE DATABASE IF NOT EXISTS catshop default character set utf8 COLLATE utf8_general_ci;
+
+马卡龙评论：
+    店面大，装饰高尚，店员服务周到，表情微笑，商品颜色“新鲜”，咬上一口，真的非常软嫩，
+    口感跟英国进口的相差不大，里面的馅，甜度刚好！！！简直是赣州极品马卡龙！！！
+
+加入马卡龙产品：

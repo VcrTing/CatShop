@@ -1,0 +1,57 @@
+购物车：使用redis缓存保存购物车数据，这样购物车访问数度更快，对web其他功能影响小
+
+订单页面：查询未购买的订单并且倒序分页显示
+
+支付宝支付接口的接入
+    1、在蚂蚁金服里面填写好你的商户
+        填写注意：
+            功能选择>网站支付
+            RSA密钥生成>windows与macox可以在
+                url=https://docs.open.alipay.com/291/105971
+                里面下载程序，生成密钥与公钥
+                ubuntu系统，可以看这篇教程来生成密钥与公钥
+                url=http://www.wendangku.net/doc/4855b5db5f0e7cd185253614.html
+                注意：现在公钥和密钥都是使用2048位的了
+
+    2、把项目部署到nginx：
+        如果使了anaconda，记得在虚拟环境中
+        安装与删除nginx = https://blog.csdn.net/qq_39090393/article/details/78405306
+        技术博客地址=http://www.cnblogs.com/jhao/p/6071790.html
+            运行此项目：
+            uwsgi --http :8001 --chdir /home/vcrting/snap/reWrite --home=//home/vcrting/anaconda3/envs/webs --module reWrite.wsgi
+
+        csdn教程=https://blog.csdn.net/u010503839/article/details/79853482
+        记得开通阿里云镜像！！！
+
+    2、把项目部署到apache2：
+        apache2安装配置及部署项目1=https://www.cnblogs.com/KKSoft/p/7923175.html
+        删除apache2=https://blog.csdn.net/awj3584/article/details/17139537
+        重启apache2=https://www.cnblogs.com/supe/p/8010612.html
+        apache2安装配置及部署项目2:博客园地址=https://www.cnblogs.com/wzxwhd/p/6290784.html
+
+
+    3、把项目映射到万网上，项目放到阿里云上或者其他云上，确保回调地址有效
+
+    4、下载python版支付宝SDK，
+
+    5、支付宝网站支付功能：
+        沙箱：支付设计、支付主流程、退款流程、优惠与运营、对账、反佣
+        上线：在线验收、第三方授权、监控交易情况
+
+阿里pay密钥：
+    获得方式：ubuntu下使用openssl，windows与mac在支付宝官网下载ssl程序，在程序中获取
+        现在的
+    我的密钥：
+        在/home/vcrting/rsa_private_key.pem里面
+
+    我的公钥：
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAldvhJ04CJN61FEQcizy7
+KyiE2yN3ifuvSZIfbUUcgajfPbKCOpUvRyhtM75W6jD1dyEOZvS7V8uwGDDsByxe
+sGGGuiC/Dg3ynU+YhWp3AOvq5qrR8NxSMY3mnIdNCRyRzuVELN0UQUdcrHzqMKgg
+0FsNGZGAka0JCaan4cKVOzrg0Uh7k2wT/e4YQu5yWWNOE1kpoftMKbQHR0pVfYoH
+u5pxKfS5gIls+2rVlRJQGZbRS6mCWd2abOTXz8oY+iyHN5vj4G/oMpAjhZklsjxr
+rUcYWeNuvScYAcUnV/v/3ihEp9NcGr/h1rQAtqvquSc96yTQKNXFeIX6fWzLMp8P
+QQIDAQAB
+-----END PUBLIC KEY-----
+

@@ -1,14 +1,35 @@
 from django.shortcuts import render
+from django.views.generic.base import View
+from apps.product.models import Product,Category
+#from apps.operation.models import OrderItem
+#from apps.user.models import UserAccount
 
 # Create your views here.
-def to_index(request):
-    '''
-    转发到网站的主界面，Index界面
-    :param request:
-    :return:render
-    '''
-    return render(request,'index.html')
+# 首页
+class IndexView(View):
 
+    def get(self, request):
+        all_category = Category.objects.all()
+
+        all_product = Product.objects.all()
+        '''user_message = request.session['user_message']
+        print('session.user_message = ', user_message)
+        if user_message:
+            user_account = user_message.user_id
+            print('user_account', user_account)'''
+        #还需要查询购物车
+        return render(request, "index.html", {
+            "all_category": all_category,
+            "all_product": all_product,
+            #"user": user_account,
+            #"user_product_cat": user_cat_count
+        })
+
+    def post(self, request):
+        print('index_post')
+
+
+#----------------------------------------tag----------------------------------------
 def error_400(request):
     '''
     400错误界面

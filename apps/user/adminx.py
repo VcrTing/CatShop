@@ -9,7 +9,7 @@ class UserAccountAdmin(object):
     site_footer = WEB_SITE_FOOTER
 
     list_display = [
-        'nickname', 'user_acc', 'phone', 'email', 'log_time'
+        'nickname', 'phone', 'email', 'log_time'
     ]
     # 将哪一列增加一个 点击可查询详细信息 的info图标
     show_detail_fields = ['user_acc']
@@ -20,7 +20,7 @@ class UserAccountAdmin(object):
     # 设置要导出的文件的格式，可选格式：xls、xml、json
     list_export = ('xls','json')
     # 设置导出列
-    list_export_fields = ('id', 'nickname', 'user_acc', 'phone', 'email', 'signature')
+    list_export_fields = ('id', 'nickname', 'phone', 'email', 'signature')
 
     # 设置只读
     def get_readonly_fields(self):
@@ -57,10 +57,10 @@ class UserStatusAdmin(object):
     refresh_times = (3,5)
 
     list_display = [
-        'acc_status', 'is_marry', 'is_house', 'is_car', 'credit_status', 'is_business', 'is_real'
+        'user_id', 'is_marry', 'is_house', 'is_car', 'credit_status', 'is_business', 'is_real'
     ]
 
-class UserMoneyAdmin(object):
+class UserMoneyCountAdmin(object):
     site_title = WEB_SITE_TITLE
     site_footer = WEB_SITE_FOOTER
 
@@ -70,12 +70,12 @@ class UserMoneyAdmin(object):
     refresh_times = (3,5)
 
     list_display = [
-        'card_num', 'card_status', 'card_useful_money', 'card_ice_money', 'use_money_count'
+        'email', 'use_money_count', 'product_num', 'create_time', 'data_status'
     ]
 
 xadmin.site.register(UserAccount, UserAccountAdmin)
 xadmin.site.register(UserMessage, UserMessageAdmin)
 xadmin.site.register(UserStatus, UserStatusAdmin)
-xadmin.site.register(UserMoney, UserMoneyAdmin)
+xadmin.site.register(UserMoneyCount, UserMoneyCountAdmin)
 
 

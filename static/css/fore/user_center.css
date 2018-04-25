@@ -1,0 +1,53 @@
+.rf{
+    float: right;
+    margin-top: -260px;
+    margin-right: 0px;
+}
+
+.rm{
+    width: 600px;
+    height: 250px;
+}
+.uimg{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+p{
+    font-size: 14px;
+}
+label{
+    margin-left: 5px;
+}
+.bb{
+    border: 0px;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 5px;
+}
+.bb{
+    float: right;
+    margin-top: 70px;
+}
+.bb:hover{
+    background: #c8000c;
+    color: #ffffff;
+}
+.btn{
+    margin-left: 50px;
+    background: #f5d917;
+    color: #ffffff;
+}
+.btn:hover{
+    background: #dfc217;
+    color: #ffffff;
+}
+.topItem{
+    width: 1013px;
+    margin-left: -10px;
+    height: 48px;
+    background: #ef002e;
+    margin-top: -50px;
+    margin-bottom: 5px;
+}

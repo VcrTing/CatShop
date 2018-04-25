@@ -1,0 +1,37 @@
+
+ubuntu 16.4下安装redis,django2.0使用redis
+    pip install django-redis
+    sudo apt-get redis
+
+    知呼小例子url=https://www.zhihu.com/question/59205893/answer/162831035
+    博客url=http://simple-is-better.com/news/275
+    源码+文档url=https://github.com/sebleier/django-redis-cache
+    redis-py源码url=https://github.com/andymccurdy/redis-py/
+
+#导入settings文件：
+from django.conf import settings
+from django.core.cache import cache
+import json
+
+a标签改变手势:css:{cursor: pointer;}
+
+enumerate用法：
+    for i,v in enumerate(data_dict):
+        print('index = ',i,' value = ',v)
+
+关闭redis_py的连接：
+    博客url=https://www.cnblogs.com/zijiyanxi/p/7599471.html
+
+str的'1'与int的1相等做比较，得出的值为False
+
+for循环倒序：for i in reversed(list):
+
+a标签跳新页面：target="_blank"
+
+redis-py设置存活时间：
+    r.expire('ex1', 10)# 存活多少秒
+
+    extime = datetime.datetime(2015,9,8,15,19,10)
+    r.expireat('ex2', extime)# 到什么时候消失
+
+juery控制属性：$('#id').attr('href','url')
